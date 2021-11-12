@@ -6,8 +6,9 @@
 	<link rel="stylesheet" href="styles.css" />
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
 
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.2.0/browser/pixi.min.js"></script>
-	<script src="../dist/index.umd.js"></script>
+	<script src="../dist/PIXI.Paste.umd.js"></script>
 </head>
 	<body>
 		<h1>Pixi Paste Demo</h1>
@@ -21,9 +22,8 @@
 					<img src="very-happy-64px.png"/>
 				</div>
 			</div>
-			<script type="module">
-
-				const pasteContainer = new PasteContainer();
+			<script>
+			console.log(PIXI);
 				const app = new PIXI.Application({
 						width: 400, 
 						height: 400, 
@@ -33,6 +33,7 @@
 				document.getElementById("pixi-container").appendChild(app.view);
 
 				const container = new PIXI.Container();
+				const pasteContainer = new pixi_paste(container);
 
 				app.stage.addChild(container);
 
