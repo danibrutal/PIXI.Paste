@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Pixi MultiStyle Text Demo</title>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" href="styles.css" />
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.2.0/browser/pixi.min.js"></script>
+	<script src="../dist/index.umd.js"></script>
+</head>
+	<body>
+		<h1>Pixi Paste Demo</h1>
+		<main>
+			<h2>Basics</h2>
+			
+			<div id="pixi-container">
+
+
+				<div id="image">
+					<img src="very-happy-64px.png"/>
+				</div>
+			</div>
+			<script type="module">
+
+				const pasteContainer = new PasteContainer();
+				const app = new PIXI.Application({
+						width: 400, 
+						height: 400, 
+						backgroundColor: 0x802A22, 
+				});
+				
+				document.getElementById("pixi-container").appendChild(app.view);
+
+				const container = new PIXI.Container();
+
+				app.stage.addChild(container);
+
+				container.addChild(pasteContainer);
+
+				// Move container to the center
+				container.x = app.screen.width / 2;
+				container.y = app.screen.height / 2;
+
+				// Center bunny sprite in local container coordinates
+				container.pivot.x = container.width / 2;
+				container.pivot.y = container.height / 2;
+
+			</script>
+		</main>
+	</body>
+</html>

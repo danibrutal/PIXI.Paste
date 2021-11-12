@@ -1,0 +1,47 @@
+{
+  "name": "pixi.paste",
+  "version": "1.0.0",
+  "description": "PIXI plugin to handle pasted images and text",
+  "main": "dist/index.js",
+  "umd:main": "dist/index.umd.js",
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danibrutal/PIXI.Paste.git"
+  },
+  "keywords": [
+    "PIXI",
+    "piji.js",
+    "paste",
+    "plugin",
+    "image",
+    "text"
+  ],
+  "author": "Daniel Martinez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danibrutal/PIXI.Paste/issues"
+  },
+  "homepage": "https://github.com/danibrutal/PIXI.Paste#readme",
+  "peerDependencies": {
+    "@pixi/core": "^6.1.0",
+    "@pixi/display": "^6.1.0",
+    "@pixi/sprite": "^6.1.0",
+    "@pixi/text": "^6.1.0"
+  },
+  "devDependencies": {
+    "@pixi/core": "^6.1.0",
+    "@pixi/display": "^6.1.0",
+    "@pixi/sprite": "^6.1.0",
+    "@pixi/text": "^6.1.0",
+    "@types/offscreencanvas": "^2019.6.4",
+    "microbundle": "^0.14.1",
+    "typescript": "^4.4.4"
+  }
+}

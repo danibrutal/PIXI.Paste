@@ -1,0 +1,9 @@
+#pixi-container {
+  width: 80%;
+  display: flex;
+  margin: 0 auto;
+}
+
+#pixi-container > div{
+  margin-right: 100px;
+}
