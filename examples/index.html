@@ -35,6 +35,26 @@
 				const container = new PIXI.Container();
 				const pasteContainer = new pixi_paste(container);
 
+				pasteContainer.onPasteText((text) => {
+					console.log(text);
+				});
+
+				pasteContainer.onPasteImage((image) => {
+					image.anchor.set(0.5);
+
+					// move the sprite to the center of the screen
+					//image.width = container.width / 2;
+					//image.height = container.height / 2;
+
+					// Listen for animate update
+					app.ticker.add((delta) => {
+							// just for fun, let's rotate mr rabbit a little
+							// delta is 1 if running at 100% performance
+							// creates frame-independent transformation
+							image.rotation += 0.01 * delta;
+					});
+				});
+
 				app.stage.addChild(container);
 
 				container.addChild(pasteContainer);

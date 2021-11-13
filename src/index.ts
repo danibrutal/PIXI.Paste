@@ -4,6 +4,13 @@ import { Texture } from "@pixi/core";
 import { Sprite } from "@pixi/sprite";
 import { Text } from "@pixi/text";
 
+export interface OnImgCallback {
+  (img: Sprite) : void | boolean;
+}
+
+export interface OnTextCallback {
+  (text: string) : void | boolean
+}
 
 declare global {
   interface Window {
@@ -13,35 +20,53 @@ declare global {
 
 const isImage = (item: DataTransferItem) => (item.kind == 'file' && item.type.match('^image/'));
 const isPlainText = (item: DataTransferItem) => (item.kind == 'string' && item.type.match('^text/plain$'));
+const isFunction = (param) => typeof param === 'function'; 
 
 export default class PasteContainer extends Container {
+
+  onPasteImageCallback: OnImgCallback;
+  onPasteTextCallback: OnTextCallback;
+
   constructor(parent: Container) {
     super();
-
     this.setParent(parent);
+
     window.document.onpaste = (evt: ClipboardEvent) => {
       const dT = evt.clipboardData || window.clipboardData as DataTransfer;
       const items = dT.items;
+      console.log(dT);
   
       for (let index in items) {
         if (isImage(items[index])) {
-          this.handleImage(items[index]);
+          this.#handleImage(items[index]);
         }else if(isPlainText(items[index])) {
-          this.handlePlainText(items[index]);
+          this.#handlePlainText(items[index]);
         }
       }
     }
   }
 
-  handlePlainText (item: DataTransferItem) {
+  onPasteText (callback: OnTextCallback) {
+    this.onPasteTextCallback = callback;
+  }
+
+  onPasteImage (callback: OnImgCallback) {
+    this.onPasteImageCallback = callback;
+  }
+
+  #handlePlainText (item: DataTransferItem) {
     item.getAsString((string) => {
       let text = new Text(string);
+
+      if (isFunction(this.onPasteTextCallback)) {
+        this.onPasteTextCallback(string);
+      }
 
       this.addChild(text);
     });
   }
 
-  handleImage (item: DataTransferItem) {
+  #handleImage (item: DataTransferItem) {
     const file = item.getAsFile();
     
     if (null === file) {
@@ -58,6 +83,10 @@ export default class PasteContainer extends Container {
       const sprite = new Sprite(texture);
       sprite.x = Math.random() * (this.parent.width * 0.7);
       sprite.y = Math.random() * (this.parent.height * 0.7);
+
+      if (isFunction(this.onPasteImageCallback)) {
+        this.onPasteImageCallback(sprite);
+      }
 
       this.addChild(sprite);
     }

@@ -13,13 +13,7 @@
     "strict": true,
     "allowSyntheticDefaultImports": true,
 		"strictNullChecks": false,
-		"baseUrl": "./",
-		"paths": {
-      "@pixi/display": ["node_modules/pixi/display"],
-      "@pixi/core": ["node_modules/pixi/core"],
-      "@pixi/sprite": ["node_modules/pixi/sprite"],
-      "@pixi/text": ["node_modules/pixi/text"],
-    }
+		"baseUrl": "./"
 	},
 	"include": ["src/**/*"],
   "exclude": ["node_modules"]
