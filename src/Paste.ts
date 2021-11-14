@@ -2,12 +2,12 @@
 import { Container } from "@pixi/display";
 import { Sprite } from "@pixi/sprite";
 import { Text } from "@pixi/text";
-import { handleImage } from "./handlers/ImageHandler";
-import { handlePlainText } from "./handlers/PlainTextHandler";
+import { handleImage } from "./transformers/ImageTransformer";
+import { handlePlainText } from "./transformers/PlainTextTransformer";
 import { isFunction, isPlainText, isImage } from "./functions";
 
 export interface OnImgCallback {
-  (img: Sprite, item: DataTransferItem) : void | boolean;
+  (img: Sprite) : void | boolean;
 }
 
 export interface OnTextCallback {
@@ -26,11 +26,11 @@ export default class PasteContainer extends Container {
   onPasteTextCallback: OnTextCallback;
 
   /**
-   * @param parent Container
+   * @param Container parent
    */
   constructor(parent: Container) {
     super();
-    
+
     this.setParent(parent);
 
     // initialize onpaste event handler
@@ -39,43 +39,64 @@ export default class PasteContainer extends Container {
 
   /**
    * 
-   * @param callback OnTextCallback
+   * @param OnTextCallback callback
    */
-   onPasteText (callback: OnTextCallback) {
+   onPasteText (callback: OnTextCallback):void {
     this.onPasteTextCallback = callback;
   }
 
   /**
    * 
-   * @param callback OnImgCallback
+   * @param OnImgCallback callback
    */
-  onPasteImage (callback: OnImgCallback) {
+  onPasteImage (callback: OnImgCallback): void {
     this.onPasteImageCallback = callback;
   }
 
   /**
    * 
-   * @param evt ClipboardEvent
+   * @param ClipboardEvent evt
    */
-  onPasteHandler (evt: ClipboardEvent) {
+  onPasteHandler (evt: ClipboardEvent): void {
     const dataTransfer = evt.clipboardData || window.clipboardData as DataTransfer;
     const dataTransferItems = dataTransfer.items;
 
     for (let transferItem of dataTransferItems) {
       if (isImage(transferItem)) {
-        handleImage(transferItem, this);
+        handleImage(transferItem, this.onTransformedImage.bind(this));
       }else if(isPlainText(transferItem)) {
         handlePlainText(transferItem, this.onTransformedText.bind(this));
       }
     }
   }
 
+  /**
+   * 
+   * @param string rawText 
+   * @param Text PIXI_text 
+   */
   onTransformedText(rawText: string, PIXI_text: Text): void {
     if (isFunction(this.onPasteTextCallback)) {
       this.onPasteTextCallback(rawText);
     }
 
     this.addChild(PIXI_text);
+  }
+
+  /**
+   * 
+   * @param Sprite PIXI_image 
+   */
+  onTransformedImage(PIXI_image: Sprite): void {
+
+    if (typeof this.onPasteImageCallback === 'function') {
+      this.onPasteImageCallback(PIXI_image);
+    }
+
+    PIXI_image.x = Math.random() * (this.parent.width * 0.7);
+    PIXI_image.y = Math.random() * (this.parent.height * 0.7);
+
+    this.addChild(PIXI_image);
   }
 
 }
