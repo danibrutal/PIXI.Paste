@@ -14,17 +14,9 @@ function handleImage (imageItem: DataTransferimageItem, callback: (PIXI_image: S
     reader.addEventListener('load', function() {
       let image: Image = new Image();
       image.src = this.result;
-
-      // image.addEventListener('load', function() {
-      //   console.log(this.width, this.height);
-      // });
-
-      //console.log(file);
       
       const texture = Texture.from(image);
       const sprite = new Sprite(texture);
-
-      console.log(sprite.width, sprite.height);
 
       callback(sprite);
     });
