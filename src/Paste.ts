@@ -1,11 +1,24 @@
 
 import { Container } from "@pixi/display";
 import { Sprite } from "@pixi/sprite";
-import { Text } from "@pixi/text";
+import { Text, TextStyle } from "@pixi/text";
 import { handleImage } from "./transformers/ImageTransformer";
 import { handlePlainText } from "./transformers/PlainTextTransformer";
 import { isFunction, isPlainText, isImage } from "./functions";
 
+export interface TextConfiguration {
+  style: TextStyle
+}
+
+export interface ImageConfiguration {
+  maxWidth: Number,
+  maxHeight: Number
+}
+export interface PasteConfiguration {
+  parent?: Container,
+  text?: TextConfiguration
+  image?: ImageConfiguration
+}
 export interface OnImgCallback {
   (img: Sprite) : void | boolean;
 }
@@ -22,16 +35,21 @@ declare global {
 
 export default class PasteContainer extends Container {
 
+  configuration: PasteConfiguration;
   onPasteImageCallback: OnImgCallback;
   onPasteTextCallback: OnTextCallback;
 
   /**
    * @param Container parent
    */
-  constructor(parent: Container) {
+  constructor(config?: PasteConfiguration) {
     super();
 
-    this.setParent(parent);
+    this.configuration = config;
+
+    if (this.configuration.parent instanceof Container) {
+      this.setParent(this.configuration.parent);
+    }
 
     // initialize onpaste event handler
     window.document.onpaste = this.onPasteHandler.bind(this);
@@ -65,7 +83,11 @@ export default class PasteContainer extends Container {
       if (isImage(transferItem)) {
         handleImage(transferItem, this.onTransformedImage.bind(this));
       }else if(isPlainText(transferItem)) {
-        handlePlainText(transferItem, this.onTransformedText.bind(this));
+        handlePlainText(
+          transferItem, 
+          this.onTransformedText.bind(this),
+          this.configuration?.text.style
+        );
       }
     }
   }
@@ -78,6 +100,11 @@ export default class PasteContainer extends Container {
   onTransformedText(rawText: string, PIXI_text: Text): void {
     if (isFunction(this.onPasteTextCallback)) {
       this.onPasteTextCallback(rawText);
+    }
+
+    if (this.parent) {
+      PIXI_text.x = Math.random() * (this.parent.width);
+      PIXI_text.y = Math.random() * (this.parent.height);
     }
 
     this.addChild(PIXI_text);
@@ -93,10 +120,11 @@ export default class PasteContainer extends Container {
       this.onPasteImageCallback(PIXI_image);
     }
 
-    PIXI_image.x = Math.random() * (this.parent.width * 0.7);
-    PIXI_image.y = Math.random() * (this.parent.height * 0.7);
+    if (this.parent) {
+      PIXI_image.x = Math.random() * (this.parent.width);
+      PIXI_image.y = Math.random() * (this.parent.height);
+    }
 
     this.addChild(PIXI_image);
   }
-
 }
