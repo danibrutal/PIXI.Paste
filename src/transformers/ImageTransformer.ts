@@ -1,7 +1,7 @@
 import { Texture } from "@pixi/core";
 import { Sprite } from "@pixi/sprite";
 
-function handleImage (imageItem: DataTransferimageItem, callback: (PIXI_image: Sprite) => void) {
+function handleImage (imageItem: DataTransferItem, callback: (PIXI_image: Sprite) => void) {
 
   const file = imageItem.getAsFile();
     
@@ -12,8 +12,8 @@ function handleImage (imageItem: DataTransferimageItem, callback: (PIXI_image: S
     const reader: FileReader  = new FileReader();
 
     reader.addEventListener('load', function() {
-      let image: Image = new Image();
-      image.src = this.result;
+      let image: HTMLImageElement = window.document.createElement('img');
+      image.src = this.result as string;
       
       const texture = Texture.from(image);
       const sprite = new Sprite(texture);

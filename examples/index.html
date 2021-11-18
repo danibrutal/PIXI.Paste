@@ -27,8 +27,10 @@
 				const app = new PIXI.Application({
 						width: 400, 
 						height: 400, 
-						backgroundColor: 0x802A22, 
+						backgroundColor: 0x802A22
 				});
+
+				console.log(window.devicePixelRatio);
 				
 				document.getElementById("pixi-container").appendChild(app.view);
 
