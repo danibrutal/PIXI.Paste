@@ -2,8 +2,7 @@
   "name": "pixi-paste",
   "version": "1.0.0",
   "description": "PIXI plugin to handle pasted images and text",
-  "main": "dist/PIXI.Paste.js",
-  "bundle": "dist/PIXI.Paste.umd.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c && npm run build:types",
