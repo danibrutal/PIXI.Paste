@@ -4,10 +4,11 @@
   "description": "PIXI plugin to handle pasted images and text",
   "main": "dist/PIXI.Paste.js",
   "bundle": "dist/PIXI.Paste.umd.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c && npm run build:types",
     "clean": "tsc --build --clean",
-    "build:types": "rimraf ./compile && tsc -p ./tsconfig.json --outDir compile",
+    "build:types": "rimraf ./dist && tsc -p ./tsconfig.json",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish"
@@ -18,7 +19,7 @@
   },
   "keywords": [
     "PIXI",
-    "piji.js",
+    "pixi.js",
     "paste",
     "plugin",
     "image",
