@@ -1,3 +1,1 @@
-import PasteContainer from "./Paste";
-
-export default PasteContainer;
+export * from "./Paste"

@@ -16,8 +16,8 @@ export interface ImageConfiguration {
 }
 export interface PasteConfiguration {
   parent?: Container,
-  text?: TextConfiguration
-  image?: ImageConfiguration
+  textConfiguration?: TextConfiguration
+  imageConfiguration?: ImageConfiguration
 }
 export interface OnImgCallback {
   (img: Sprite) : void | boolean;
@@ -33,7 +33,7 @@ declare global {
   }
 }
 
-export default class PasteContainer extends Container {
+export class PasteContainer extends Container {
 
   configuration: PasteConfiguration;
   onPasteImageCallback: OnImgCallback;
@@ -75,7 +75,7 @@ export default class PasteContainer extends Container {
    * 
    * @param ClipboardEvent evt
    */
-  onPasteHandler (evt: ClipboardEvent): void {
+  private onPasteHandler (evt: ClipboardEvent): void {
     const dataTransfer = evt.clipboardData || window.clipboardData as DataTransfer;
     const dataTransferItems = dataTransfer.items;
 
@@ -86,7 +86,7 @@ export default class PasteContainer extends Container {
         handlePlainText(
           transferItem, 
           this.onTransformedText.bind(this),
-          this.configuration?.text.style
+          this.configuration?.textConfiguration.style
         );
       }
     }
@@ -97,9 +97,11 @@ export default class PasteContainer extends Container {
    * @param string rawText 
    * @param Text PIXI_text 
    */
-  onTransformedText(rawText: string, PIXI_text: Text): void {
+  private onTransformedText(rawText: string, PIXI_text: Text): void {
     if (isFunction(this.onPasteTextCallback)) {
-      this.onPasteTextCallback(rawText);
+      if (false === this.onPasteTextCallback(rawText)) {
+        return;
+      }
     }
 
     if (this.parent) {
@@ -114,10 +116,13 @@ export default class PasteContainer extends Container {
    * 
    * @param Sprite PIXI_image 
    */
-  onTransformedImage(PIXI_image: Sprite): void {
+  private onTransformedImage(PIXI_image: Sprite): void {
 
     if (typeof this.onPasteImageCallback === 'function') {
-      this.onPasteImageCallback(PIXI_image);
+      // If returned false, won't be added to PIXI
+      if (false === this.onPasteImageCallback(PIXI_image)) {
+        return;
+      }
     }
 
     if (this.parent) {

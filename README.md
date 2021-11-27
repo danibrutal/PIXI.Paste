@@ -5,7 +5,7 @@
 ## Install it 
 
 ```
-npm i pixi-paste'
+npm i pixi-paste
 ```
 
 ## Example
@@ -17,28 +17,25 @@ const app = new PIXI.Application({
     backgroundColor: 0x802A22
 });
 
-const container = new PIXI.Container();
-
-// Our Paste Container
-const pasteContainer = new PasteContainer({
-  parent: container,
-  text: { style }
-});
-
 // Some styles for pasted Text!
 const style = new PIXI.TextStyle({
     fontFamily: "\"Lucida Sans Unicode\", \"Lucida Grande\", sans-serif",
-    fontStyle: "italic",
-    fontVariant: "small-caps",
-    fontWeight: "bolder",
     fill: 0xffffff
 });
 
-// Event where you you can pass a callback to intercept the text
-pasteContainer.onPasteText((text) => {
-  console.log(text);
+/**
+  * Our Paste Container.
+  * Optionally, you can specify the parent of the container.
+  */
+const pasteContainer = new PasteContainer({
+  parent: app.stage, 
+  text: { style }
 });
 
+// Event where you you can pass a callback to intercept the text
+pasteContainer.onPasteText((pastedText) => {
+  console.log(pastedText);
+});
 
 // Similar for the image!
 pasteContainer.onPasteImage((image) => {
@@ -49,15 +46,8 @@ pasteContainer.onPasteImage((image) => {
   });
 });
 
-app.stage.addChild(container);
-container.addChild(pasteContainer);
+app.stage.addChild(pasteContainer);
 ```
 ## How to contribute
 
 Just make PR.
-
-Some possible features missing:
-- Pass relevant info in both onPasteText and onPasteImage callbacks
-- Allow returning `false` on those callbacks, to not include the pasted content
-- Allow removing pasted images and text
-- ...
