@@ -86,7 +86,7 @@ export class PasteContainer extends Container {
         handlePlainText(
           transferItem, 
           this.onTransformedText.bind(this),
-          this.configuration?.textConfiguration.style
+          this.configuration.textConfiguration?.style
         );
       }
     }
